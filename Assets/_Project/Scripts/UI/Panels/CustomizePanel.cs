@@ -4,12 +4,25 @@ using UnityEngine;
 
 public class CustomizePanel : Panel
 {
-    protected override void SelectionPanel()
-    {
-        base.SelectionPanel();
+    [SerializeField] private GameObject customizePrefab;
+    protected override void Start()
+    {    
+        base.Start();
     }
-    protected override void DeselectionPanel()
+    protected override void OnSelectionPanel()
     {
-        base.DeselectionPanel();
+        base.OnSelectionPanel();
+        SetActiveCustomizeCharacter(true);
     }
+    protected override void OnDeselectionPanel()
+    {
+        base.OnDeselectionPanel();
+        SetActiveCustomizeCharacter(false);
+    }
+
+    private void SetActiveCustomizeCharacter(bool isActive)
+    {
+        customizePrefab.SetActive(isActive);
+    }
+    
 }

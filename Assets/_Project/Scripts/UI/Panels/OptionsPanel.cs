@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class OptionsPanel : Panel
 {
-    protected override void SelectionPanel()
-    {
-        base.SelectionPanel();
+    protected override void Start()
+    {    
+        base.Start();
     }
-    protected override void DeselectionPanel()
+    protected override void OnSelectionPanel()
     {
-        base.DeselectionPanel();
+        base.OnSelectionPanel();
+    }
+    protected override void OnDeselectionPanel()
+    {
+        base.OnDeselectionPanel();
     }
 }
