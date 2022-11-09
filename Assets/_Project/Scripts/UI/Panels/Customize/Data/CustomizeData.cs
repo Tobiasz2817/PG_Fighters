@@ -27,11 +27,20 @@ public class CustomizeData : MonoBehaviour
         public Sprite imagePrefab;
     }
 
-    private readonly List<MainPart> customizeLists = new List<MainPart>();
+    [SerializeField]
+    private List<MainPart> customizeLists = new List<MainPart>();
     #endregion
 
     public List<MainPart> GetCustomizeList()
     {
         return customizeLists;
+    }
+
+    public IEnumerable<string> StringContents()
+    {
+        foreach (var contentName in customizeLists)
+        {
+            yield return contentName.nameMainPart;
+        }
     }
 }

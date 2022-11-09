@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CustomizeEquipmentParts : MonoBehaviour
 {
@@ -18,27 +19,34 @@ public class CustomizeEquipmentParts : MonoBehaviour
     {
         int x = 0;
         foreach (var mainPart in _customizeData.GetCustomizeList())
-        foreach (var secoundPart in mainPart.secoundPartList)
-        {
-            var tmp = Instantiate(_customizePrefab, transform);
-            var customizePrefab = tmp.GetComponent<CustomizePrefab>();
-            customizePrefab.SetupPrefab(secoundPart.nameFirstPart,mainPart.nameMainPart);
-
-            foreach (var element in secoundPart.partList)
+            foreach (var secoundPart in mainPart.secoundPartList)
             {
-                customizePrefab.SetupChild(new CustomizeSelection() {customizePrefab = element.prefab, index = x},element.imagePrefab);
-                CustomizeCharacterData.Instance.SetElementsCustomizedCharacter(x,element.prefab);
-                x++;
-            }
+                var tmp = Instantiate(_customizePrefab, transform);
+                var customizePrefab = tmp.GetComponent<CustomizePrefab>();
+                customizePrefab.SetupPrefab(secoundPart.nameFirstPart,mainPart.nameMainPart);
 
-        }
+                foreach (var element in secoundPart.partList)
+                {
+                    customizePrefab.SetupChild(new CustomizeSelection() {customizePrefab = element.prefab, index = x}, element.imagePrefab);
+                    CustomizeCharacterEquipmentData.Instance.SetElementsCustomizedCharacter(x,element.prefab);
+                    x++;
+                }
+            }
     }
 
     public void SaveChanges()
     {
-        foreach (var prefab in GetComponentsInChildren<CustomizePrefab>())
+        Dictionary<string,List<int>> tmp = new Dictionary<string, List<int>>();
+        var customizePrefabs = GetComponentsInChildren<CustomizePrefab>();
+        foreach (var customizePrefab in customizePrefabs)
         {
-            CustomizeCharacterData.Instance.SetCurrentEquipment(prefab.Content,prefab.IndexPrefab);
+            if(tmp.ContainsKey(customizePrefab.Content))
+                tmp[customizePrefab.Content].Add(customizePrefab.IndexPrefab);
+            else
+                tmp.Add(customizePrefab.Content,new List<int>() {customizePrefab.IndexPrefab});
         }
+
+        foreach (var dict in tmp)
+            CustomizeCharacterEquipmentData.Instance.SetCurrentEquipment(new CustomizeEquipmentPart() {head = dict.Key, indexList = dict.Value});
     }
 }

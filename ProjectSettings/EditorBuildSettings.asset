@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Project/Scenes/UI.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/_Project/Scenes/CustomizeCharacterTemplate.unity
+    guid: 3cc1357b6e47ce045a9761945f950b6b
   m_configObjects: {}

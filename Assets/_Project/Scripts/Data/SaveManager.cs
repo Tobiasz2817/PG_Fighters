@@ -1,65 +1,91 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
-public class SaveManager : MonoBehaviour
-{
-    public static string directory = "SaveData";
-    public static string fileName = "MySave.data";
 
-    public static void SaveData<T>(T saveData)
+public class SaveManager
+{
+    [Serializable]
+    private class Wrapper<T>
+    {
+        public List<T> Items;
+    }
+    
+    private static string directory = "SaveData";
+    private static string typeFile = ".save";
+
+    public static void SaveDates<T>(T[] saveData,string fileName)
     {
         if (!DirectoryExists())
-            Directory.CreateDirectory(Application.persistentDataPath + "/" + directory);
+            Directory.CreateDirectory(directory);
+
+        // Load and append
+        Wrapper<T> wrapper = new Wrapper<T>();
+        if (SaveExsist(fileName))
+            wrapper.Items = LoadAndAppend(saveData, fileName);
+        else
+            wrapper.Items = saveData.ToList();
         
-        FileStream dataStream = new FileStream(GetFullPath(), FileMode.Create);
+        // Open stream and write to file
+        FileStream dataStream = new FileStream(GetFullPath(fileName), FileMode.Create);
+        using BinaryWriter writer = new BinaryWriter(dataStream);
 
-        BinaryFormatter converter = new BinaryFormatter();
-        converter.Serialize(dataStream, saveData);
-
+        var jsonString = JsonUtility.ToJson(wrapper, true);
+        writer.Write(jsonString);
+        
         dataStream.Close();
     }
 
-    public static T LoadData<T>()
+    private static List<T> LoadAndAppend<T>(T[] newData,string fileName)
     {
-        if (SaveExsist())
-        {
+        var loadedDates = LoadDates<T>(fileName);
+        foreach (var tmp in newData)
+            if(!loadedDates.Contains(tmp)) loadedDates.Add(tmp);
+
+        return loadedDates;
+    }
+    public static List<T> LoadDates<T>(string fileName)
+    {
+        if (SaveExsist(fileName))
+        {   
             try
             {
-                FileStream dataStream = new FileStream(GetFullPath(), FileMode.Open);
+                FileStream dataStream = new FileStream(GetFullPath(fileName), FileMode.Open);
 
-                BinaryFormatter converter = new BinaryFormatter();
-                T saveData = (T) converter.Deserialize(dataStream);
+                using BinaryReader reader = new BinaryReader(dataStream);
+                var jsonString = reader.ReadString();
+                Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(jsonString);
 
                 dataStream.Close();
-                return saveData;
+            
+                return wrapper.Items;
             }
             catch (SerializationException exc)
             {
                 Debug.Log("Failed to load file");
             }
         }
-
-        return default;
+        
+        
+        return new List<T>(){};
     }
 
-    public static bool SaveExsist()
+    private static bool SaveExsist(string fileName)
     {
-        return File.Exists(GetFullPath());
+        return File.Exists(GetFullPath(fileName));
     }
 
-    public static bool DirectoryExists()
+    private static bool DirectoryExists()
     {
-        return Directory.Exists(Application.persistentDataPath + "/" + directory);
+        return Directory.Exists(directory);
     }
 
-    private static string GetFullPath()
+    private static string GetFullPath(string fileName) 
     {
-        return Application.persistentDataPath + "/" + directory + "/" + fileName;
+        return directory + "/" + fileName + typeFile;
     }
 }
 
