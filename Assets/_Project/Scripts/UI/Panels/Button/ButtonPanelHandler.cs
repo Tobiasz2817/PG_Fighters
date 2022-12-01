@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class ButtonPanelHandler : MonoBehaviour
 {
     public Panels _panel;
-    public Action<Panels> OnButtonClick;
+    public static Action<Panels> OnButtonClick;
 
     private void Awake()
     {

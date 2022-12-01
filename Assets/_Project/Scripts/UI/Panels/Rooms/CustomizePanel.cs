@@ -1,13 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CustomizePanel : Panel
 {
     [SerializeField] private GameObject customizePrefab;
+    [SerializeField] private Button button;
+
+    public static event Action OnSaveChanges;
+    
     protected override void Start()
     {    
         base.Start();
+        button.onClick.AddListener(SaveChanges);
     }
     protected override void OnSelectionPanel()
     {
@@ -24,5 +29,8 @@ public class CustomizePanel : Panel
     {
         customizePrefab.SetActive(isActive);
     }
-    
+    public void SaveChanges()
+    {
+        OnSaveChanges?.Invoke();
+    }
 }

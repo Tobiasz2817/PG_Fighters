@@ -19,23 +19,16 @@ public class PanelActivity : MonoBehaviour
     
     private void Awake()
     {
-        _buttonsHandler = GetComponentsInChildren<ButtonPanelHandler>();
         _panels = GetComponentsInChildren<Panel>();
     }
 
     private void OnEnable()
     {
-        foreach (var buttonHandler in _buttonsHandler)
-        {
-            buttonHandler.OnButtonClick += ButtonHandler;
-        }
+        ButtonPanelHandler.OnButtonClick += ButtonHandler;
     }
     private void OnDisable()
     {
-        foreach (var buttonHandler in _buttonsHandler)
-        {
-            buttonHandler.OnButtonClick -= ButtonHandler;
-        }
+        ButtonPanelHandler.OnButtonClick -= ButtonHandler;
     }
     private void ButtonHandler(Panels typePanel)
     {
@@ -47,7 +40,7 @@ public class PanelActivity : MonoBehaviour
         
         otherPanels.ForEach(panel => { panel.OnPanelDeselection?.Invoke();});
         currentPanel.OnPanelSelection?.Invoke();
-
+        
         currentSelectedPanel = currentPanel;
     }
 
