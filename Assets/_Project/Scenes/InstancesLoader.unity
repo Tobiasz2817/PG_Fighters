@@ -691,8 +691,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadScene:
-    sceneAsset: {fileID: 102900000, guid: 3cc1357b6e47ce045a9761945f950b6b, type: 3}
-    scenePath: Assets/_Project/Scenes/CustomizeCharacterTemplate.unity
+    sceneAsset: {fileID: 102900000, guid: 9fc0d4010bbf28b4594072e72b8655ab, type: 3}
+    scenePath: Assets/_Project/Scenes/UI.unity
   slider: {fileID: 1573752200}
 --- !u!4 &1844205445
 Transform:

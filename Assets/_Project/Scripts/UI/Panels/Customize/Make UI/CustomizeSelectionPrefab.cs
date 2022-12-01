@@ -2,27 +2,46 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public struct CustomizeSelection
+public class CustomizeSelection
 {
-    public GameObject customizePrefab;
+    public string contentName;
+    public string secoundPart;
     public int index;
+    
+    public CustomizeSelection(string content, string secoundPart, int index)
+    {
+        this.contentName = content;
+        this.secoundPart = secoundPart;
+        this.index = index;
+    }
 }
 public class CustomizeSelectionPrefab : MonoBehaviour
 {
     private CustomizeSelection customizeSelection;
-    public Action<CustomizeSelection> OnButtonPressed;
 
+    public GameObject customizePrefab;
+    public static event Action<CustomizeSelection,GameObject> OnCustomizeSelectionPart;
+    public static event Action<GameObject> OnCustomizeSelectionColor;
+    
     [SerializeField] private Button buttonHandler;
     [SerializeField] private Image partImage;
     
-    public void Setup(CustomizeSelection customizeSelection,Sprite sprite)
+    public void Setup(CustomizeSelection customizeSelection,Sprite sprite, GameObject customizePrefab)
     {
-        AddButtonListner();
-        SetImageSprite(sprite);
         SetCustomizeSelection(customizeSelection);
+        SetImageSprite(sprite);
+        SetPrefab(customizePrefab);
+        AddButtonListner();
     }
-    private void AddButtonListner() => buttonHandler.onClick.AddListener(ButtonPressed);
+    private void AddButtonListner()
+    {
+        if (customizeSelection.secoundPart == "Color")
+            buttonHandler.onClick.AddListener(() => { OnCustomizeSelectionColor?.Invoke(customizePrefab);});
+        else
+            buttonHandler.onClick.AddListener(() => { OnCustomizeSelectionPart?.Invoke(customizeSelection,customizePrefab);});
+    }
+
     private void SetCustomizeSelection(CustomizeSelection customizeSelection) => this.customizeSelection = customizeSelection;
     private void SetImageSprite(Sprite spirte) => partImage.sprite = spirte;
-    private void ButtonPressed() => OnButtonPressed?.Invoke(customizeSelection);
+    private void SetPrefab(GameObject prefab) => this.customizePrefab = prefab;
 }

@@ -37,7 +37,6 @@ public class Panel : MonoBehaviour
         OnPanelSelection -= OnSelectionPanel;
         OnPanelDeselection -= OnDeselectionPanel;
     }
-
     protected virtual void OnSelectionPanel()
     {
         SetInteractable(true);

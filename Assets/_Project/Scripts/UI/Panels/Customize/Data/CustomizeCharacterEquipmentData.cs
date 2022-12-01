@@ -26,7 +26,7 @@ public class CustomizeCharacterEquipmentData : MonoBehaviour, IDataInstances
     {
         customizeCharacterDict.Add(index,gameObject);
     }
-    public GameObject GetCustomizePrefab(int index)
+    public GameObject TryGetCustomizePrefab(int index)
     {
         GameObject pref;
         if (customizeCharacterDict.TryGetValue(index, out pref))
@@ -34,15 +34,26 @@ public class CustomizeCharacterEquipmentData : MonoBehaviour, IDataInstances
         
         return null;
     }
-
+    public GameObject GetCustomizePrefab(int index)
+    {
+        return index < customizeCharacterDict.Count && index > 0 ? customizeCharacterDict[index] : null;
+    }
     #endregion
 
     #region Equipment Data Operations
 
-    private readonly List<CustomizeEquipmentPart> currentEquipment = new List<CustomizeEquipmentPart>();
-    public void SetCurrentEquipment(CustomizeEquipmentPart customizeEquipmentPart)
+    private readonly List<CustomizeSelection> currentEquipment = new List<CustomizeSelection>();
+    public string currentKeySelectedCustomization;
+    public void SetCurrentEquipment(CustomizeSelection customizeEquipmentPart)
     {
         currentEquipment.Add(customizeEquipmentPart);
+    }
+    public IEnumerable<string> GetHeaders()
+    {
+        foreach (var customizeEquipmentPart in currentEquipment)
+        {
+            yield return customizeEquipmentPart.contentName;
+        }
     }
     #endregion
     
@@ -51,11 +62,4 @@ public class CustomizeCharacterEquipmentData : MonoBehaviour, IDataInstances
         CreateInstances();
         return Task.Delay(1);
     }
-}
-
-[Serializable]
-public class CustomizeEquipmentPart
-{
-    public string head;
-    public List<int> indexList = new List<int>();
 }

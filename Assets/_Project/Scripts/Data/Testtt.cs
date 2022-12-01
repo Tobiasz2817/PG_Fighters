@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class Testtt : MonoBehaviour
 {
-    [SerializeField]
+    /*[SerializeField]
     private PlayerInput _playerInput;
 
     public static string PLAYER_DATA_FILE = "PlayerFile"; 
@@ -51,7 +51,7 @@ public class Testtt : MonoBehaviour
         SaveManager.SaveDates(new [] {gameObject},PLAYER_DATA_FILE);
         
         Debug.Log("Save Data");
-    }
+    }*/
 }
 [Serializable]
 public struct PlayerData
