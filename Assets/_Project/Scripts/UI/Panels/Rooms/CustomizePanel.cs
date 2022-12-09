@@ -8,7 +8,12 @@ public class CustomizePanel : Panel
     [SerializeField] private Button button;
 
     public static event Action OnSaveChanges;
-    
+
+    protected override void Awake()
+    {
+        base.Awake();
+    }
+
     protected override void Start()
     {    
         base.Start();

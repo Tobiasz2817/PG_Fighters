@@ -1,8 +1,7 @@
 using System;
-using System.Threading.Tasks;
 using DG.Tweening;
-using TMPro;
 using UnityEngine;
+
 
 public class Panel : MonoBehaviour
 {
@@ -16,14 +15,17 @@ public class Panel : MonoBehaviour
     [SerializeField]
     protected float alphaDuration = 0.8f;
 
-    private void Awake()
+    [HideInInspector]
+    public bool isCurrentActive = false;
+
+    protected virtual void Awake()
     {
         _canvasGroup = GetComponent<CanvasGroup>();
     }
 
     protected virtual void Start()
     {
-        OnDeselectionPanel();
+       
     }
 
     public void OnEnable()
@@ -42,18 +44,22 @@ public class Panel : MonoBehaviour
         SetInteractable(true);
         SetBlockRaycasts(true);
         SmoothSelectionPanel();
+
+        isCurrentActive = true;
     }
     protected virtual void OnDeselectionPanel()
     {
         SetInteractable(false);
         SetBlockRaycasts(false);
         SmoothDeselectionPanel();
+
+        isCurrentActive = false;
     }
     private void SmoothSelectionPanel()
     {
         _canvasGroup.DOFade(1, alphaDuration);
     }
-    private void SmoothDeselectionPanel()
+    private async void SmoothDeselectionPanel()
     {
         _canvasGroup.DOFade(0, alphaDuration / 2);
     }
