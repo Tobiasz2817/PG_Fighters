@@ -2,60 +2,73 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum Panels
-{
-    NonePanel,
-    CreatePanel,
-    LobbiesPanel,
-    WaitingPanel,   
-    CustomizePanel,
-    OptionsPanel,
-}
 public class PanelActivity : MonoBehaviour
 {
+    public static PanelActivity Instance;
+    
     private Panel[] _panels;
     private Panel currentSelectedPanel;
+    
+    private MainPanel[] _mainPanels;
+    private MainPanel currentSelectedMainPanel;
+    
     private ButtonPanelHandler[] _buttonsHandler;
     
     private void Awake()
     {
+        Instance = this;
         _panels = GetComponentsInChildren<Panel>();
+        _mainPanels = GetComponentsInChildren<MainPanel>();
     }
 
     private void OnEnable()
     {
-        ButtonPanelHandler.OnButtonClick += ButtonHandler;
+        ButtonPanelHandler.OnButtonClick += MoveTo;
     }
     private void OnDisable()
     {
-        ButtonPanelHandler.OnButtonClick -= ButtonHandler;
+        ButtonPanelHandler.OnButtonClick -= MoveTo;
     }
-    private void ButtonHandler(Panels typePanel)
+    public void MoveTo(Panels typePanel)
     {
-        var (currentPanel, otherPanels) = FindPanels(typePanel);
-        if (!currentPanel || otherPanels.Count == 0) return;
-        if (currentSelectedPanel == currentPanel) return;
+        var newPanel = FindPanels(typePanel);
+        if (!newPanel) return;
+        if (currentSelectedPanel == newPanel) return;
         
         Debug.Log("Invoke Button handler");
         
-        otherPanels.ForEach(panel => { panel.OnPanelDeselection?.Invoke();});
-        currentPanel.OnPanelSelection?.Invoke();
+        if(currentSelectedPanel) currentSelectedPanel.OnPanelDeselection?.Invoke();
+        newPanel.OnPanelSelection?.Invoke();
         
-        currentSelectedPanel = currentPanel;
+        currentSelectedPanel = newPanel;
     }
-
-    (Panel,List<Panel>) FindPanels(Panels typePanel)
+    public void MoveTo(MainPanels mainTypePanel)
     {
-        Panel currentPanel = null;
-        List<Panel> othersPanel = new List<Panel>();
-        foreach (Panel panel in _panels)
-        {
-            if (panel.myType == typePanel)
-                currentPanel = panel;
-            else
-                othersPanel.Add(panel);
-        }
+        var newPanel = FindPanels(mainTypePanel);
+        if (!newPanel) return;
+        if (currentSelectedMainPanel == newPanel) return;
         
-        return (currentPanel,othersPanel);
+        Debug.Log("Invoke Button handler");
+        
+        if(currentSelectedMainPanel) currentSelectedMainPanel.OnPanelDeselection?.Invoke();
+        newPanel.OnPanelSelection?.Invoke();
+        
+        currentSelectedMainPanel = newPanel;
+    }
+    Panel FindPanels(Panels typePanel)
+    {
+        foreach (Panel panel in _panels)
+            if (panel.myType == typePanel)
+                return panel;
+
+        return null;
+    }
+    MainPanel FindPanels(MainPanels typePanel)
+    { 
+        foreach (MainPanel panel in _mainPanels)
+            if (panel.myType == typePanel)
+                return panel;
+
+        return null;
     }
 }
