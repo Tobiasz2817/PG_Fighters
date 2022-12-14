@@ -11,7 +11,6 @@ public class WaitingRoomPanel : Panel
     
     [SerializeField] private Button changeGameModeButton;
     [SerializeField] private Button isReadyBT;
-    [SerializeField] private Button startBT;
     
     [SerializeField] private TextMeshProUGUI lobbyNameText;
     [SerializeField] private TextMeshProUGUI playerCountText;
@@ -28,13 +27,13 @@ public class WaitingRoomPanel : Panel
         });
         
         isReadyBT.onClick.AddListener(() => {
-            isActive = !isActive;
-            SetTextActive();
-            LobbyManager.Instance.UpdatePlayerActive(isActive);
-        });
-        
-        startBT.onClick.AddListener(() => {
-            LobbyManager.Instance.StartGame();
+            if (LobbyManager.Instance.IsLobbyHost()) {
+                LobbyManager.Instance.StartGame();
+            }
+            else {
+                isActive = !isActive;
+                LobbyManager.Instance.UpdatePlayerActive(isActive);
+            }
         });
     }
 
@@ -87,11 +86,14 @@ public class WaitingRoomPanel : Panel
         }
 
         var isHost = LobbyManager.Instance.IsLobbyHost();
-        var roomIsReady = LobbyManager.Instance.PlayersReady();
         changeGameModeButton.gameObject.SetActive(isHost);
-        startBT.gameObject.SetActive(isHost && roomIsReady);
-        if(isHost) isReadyBT.gameObject.SetActive(!roomIsReady);
 
+        if (isHost) {
+            isReadyBT.gameObject.SetActive(LobbyManager.Instance.PlayersReady());
+            SetTextActive("Start");
+        }
+        else SetTextActive(isActive ? "Ready" : "UnReady");
+        
         lobbyNameText.text = lobby.Name;
         enterCodeText.text = lobby.LobbyCode;
         playerCountText.text = lobby.Players.Count + "/" + lobby.MaxPlayers;
@@ -105,8 +107,8 @@ public class WaitingRoomPanel : Panel
         }
     }
 
-    private void SetTextActive() {
-        isReadyText.text = isActive ? "Ready" : "UnReady";
+    private void SetTextActive(string readyText) {
+        isReadyText.text = readyText;
     }
 
 }
