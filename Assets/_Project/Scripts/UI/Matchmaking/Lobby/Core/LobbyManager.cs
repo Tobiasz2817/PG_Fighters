@@ -46,7 +46,7 @@ public class LobbyManager : MonoBehaviour
     }
 
     private void Update() {
-        //HandleRefreshLobbyList();
+        HandleRefreshLobbyList();
         HandleLobbyHeartbeat();
         HandleLobbyPolling();
     }
@@ -101,9 +101,8 @@ public class LobbyManager : MonoBehaviour
                 float lobbyPollTimerMax = 1.1f;
                 lobbyPollTimer = lobbyPollTimerMax;
                 
-                Debug.Log("After Taking Lobby Async");
                 joinedLobby = await LobbyService.Instance.GetLobbyAsync(joinedLobby.Id);
-                Debug.Log("Before Taking Lobby Async");
+
                 OnJoinedLobbyUpdate?.Invoke(joinedLobby);
                 
                 if (!IsPlayerInLobby()) {
@@ -193,6 +192,8 @@ public class LobbyManager : MonoBehaviour
 
         joinedLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
 
+        UpdatePlayerActive(true);
+        
         OnJoinedLobby?.Invoke(joinedLobby);
     }
 
@@ -238,7 +239,7 @@ public class LobbyManager : MonoBehaviour
         }
     }
 
-    public async void JoinLobbyByCode(string lobbyCode) {
+    public async void JoinLobby(string lobbyCode) {
         Player player = GetPlayer();
 
         joinedLobby = await LobbyService.Instance.JoinLobbyByCodeAsync(lobbyCode, new JoinLobbyByCodeOptions {
@@ -247,7 +248,15 @@ public class LobbyManager : MonoBehaviour
 
         OnJoinedLobby?.Invoke(joinedLobby);
     }
-    
+    public async void JoinLobby(Lobby lobby) {
+        Player player = GetPlayer();
+
+        joinedLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobby.Id, new JoinLobbyByIdOptions() {
+            Player = player
+        });
+
+        OnJoinedLobby?.Invoke(joinedLobby);
+    }
     public async void UpdatePlayerActive(bool isActive) {
         if (joinedLobby != null) {
             try {
