@@ -12,6 +12,6 @@ public class CustomizeSelectionColor : MonoBehaviour
 
     private void EquipColor(GameObject prefab)
     {
-        meshRenderer.material.mainTexture = prefab.GetComponent<SkinnedMeshRenderer>().material.mainTexture;
+        meshRenderer.material = prefab.GetComponent<SkinnedMeshRenderer>().material;
     }
 }

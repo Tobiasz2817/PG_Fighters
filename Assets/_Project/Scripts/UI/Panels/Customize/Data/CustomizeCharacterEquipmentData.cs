@@ -28,11 +28,11 @@ public class CustomizeCharacterEquipmentData : MonoBehaviour, IDataInstances
     }
     public GameObject TryGetCustomizePrefab(int index)
     {
-        GameObject pref;
+        GameObject pref = null;
         if (customizeCharacterDict.TryGetValue(index, out pref))
             return pref;
         
-        return null;
+        return pref;
     }
     public GameObject GetCustomizePrefab(int index)
     {
@@ -44,6 +44,7 @@ public class CustomizeCharacterEquipmentData : MonoBehaviour, IDataInstances
 
     private readonly List<CustomizeSelection> currentEquipment = new List<CustomizeSelection>();
     public string currentKeySelectedCustomization;
+    
     public void SetCurrentEquipment(CustomizeSelection customizeEquipmentPart)
     {
         currentEquipment.Add(customizeEquipmentPart);

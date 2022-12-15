@@ -18,15 +18,17 @@ public class CustomizeCharacterEquipment : MonoBehaviour
     {
         CustomizeSelectionPrefab.OnCustomizeSelectionPart += EquipPart;
         CustomizePanel.OnSaveChanges += SaveChanges;
+        CustomizationLoader.OnCustomizeSelected += EquipLoadParts;
     }
 
     private void OnDisable()
     {
         CustomizeSelectionPrefab.OnCustomizeSelectionPart -= EquipPart;
         CustomizePanel.OnSaveChanges -= SaveChanges;
+        CustomizationLoader.OnCustomizeSelected -= EquipLoadParts;
     }
 
-    private void Start()
+    private void Awake()
     {
         FindContents(transform);
     }
@@ -48,14 +50,10 @@ public class CustomizeCharacterEquipment : MonoBehaviour
                 }
     }
 
-    private void EquipPart(CustomizeSelection customizeSelection, GameObject prefab)
-    {
+    private void EquipPart(CustomizeSelection customizeSelection, GameObject prefab){
         Debug.Log("TAK");
-        for (int i = 0; i < currentEquipment.Count; i++)
-        {
-            Debug.Log("TAK");
-            if (currentEquipment[i].customizeSelection.secoundPart == customizeSelection.secoundPart)
-            {
+        for (int i = 0; i < currentEquipment.Count; i++) {
+            if (currentEquipment[i].customizeSelection.secoundPart == customizeSelection.secoundPart) {
                 if (currentEquipment[i].prefab != null)
                     Destroy(currentEquipment[i].prefab);
 
@@ -64,48 +62,55 @@ public class CustomizeCharacterEquipment : MonoBehaviour
             }
         }
     }
-    private void SaveChanges()
-    {
+    private void SaveChanges() {
         List<CustomizeSelection> customizeSelections = new List<CustomizeSelection>();
-        foreach (var current in currentEquipment)
-        {
+
+        foreach (var current in currentEquipment) 
             customizeSelections.Add(current.customizeSelection);
-        }
 
-        SaveManager.SaveDates("TEST",customizeSelections,CustomizationLoader.CUSTOMIZE_FILE);
+        SaveManager.SaveDates(CustomizeCharacterEquipmentData.Instance.currentKeySelectedCustomization,customizeSelections,CustomizationLoader.CUSTOMIZE_FILE,ModificationType.Replaced);
+        SaveManager.SaveDates(CustomizeCharacterEquipmentData.Instance.currentKeySelectedCustomization,customizeSelections,CustomizationLoader.CUSTOMIZE_FILE,ModificationType.Replaced);
     }
 
-    public void ClearSaves()
-    {
-        foreach (var equipment in currentEquipment)
-        { 
+    public void ClearSaves() {
+        foreach (var equipment in currentEquipment) {
             Destroy(equipment.prefab);
+            equipment.customizeSelection.index = -1;
+            equipment.prefab = null;
         }
-        currentEquipment.Clear();
     }
-    public void EquipLoadParts(List<CustomizeSelection> customizationEquipmetns)
-    {
+    public void EquipLoadParts(List<CustomizeSelection> customizationEquipmetns) {
         ClearSaves();
-
-        foreach (var current in customizationEquipmetns)
-        {
+        
+        foreach (var current in customizationEquipmetns) {
+            if(current.index == -1) continue;
             var newObject =
                 Instantiate(
                     CustomizeCharacterEquipmentData.Instance.GetCustomizePrefab(current.index),
                     contents[current.contentName]);
-                
-            currentEquipment.Add(new CustomizeSelectionTmp(current,newObject));
+
+            var customizeSelectionTmp = GetCustomizeElement(current.secoundPart);
+            if(customizeSelectionTmp == null) continue;
+
+            customizeSelectionTmp.prefab = newObject;
+            customizeSelectionTmp.customizeSelection.index = current.index;
         }
+    }
+
+    private CustomizeSelectionTmp GetCustomizeElement(string secoundPart) {
+        foreach (var element in currentEquipment) 
+            if (element.customizeSelection.secoundPart == secoundPart)
+                return element;
+        
+        return null;
     }
 }
 
-public class CustomizeSelectionTmp
-{
+public class CustomizeSelectionTmp {
     public CustomizeSelection customizeSelection;
     public GameObject prefab;
 
-    public CustomizeSelectionTmp(CustomizeSelection customizeSelection, GameObject prefab)
-    {
+    public CustomizeSelectionTmp(CustomizeSelection customizeSelection, GameObject prefab) {
         this.customizeSelection = customizeSelection;
         this.prefab = prefab;
     }

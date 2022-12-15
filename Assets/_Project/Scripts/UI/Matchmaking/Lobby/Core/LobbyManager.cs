@@ -46,8 +46,8 @@ public class LobbyManager : MonoBehaviour
     }
 
     private void Update() {
-        HandleRefreshLobbyList();
         HandleLobbyHeartbeat();
+        HandleRefreshLobbyList();
         HandleLobbyPolling();
     }
 

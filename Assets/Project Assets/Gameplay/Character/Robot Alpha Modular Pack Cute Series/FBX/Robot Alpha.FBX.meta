@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 5d6ec23407a4da3408df7c10e27d81bf
 ModelImporter:
-  serializedVersion: 20200
+  serializedVersion: 21300
   internalIDToNameTable: []
   externalObjects: {}
   materials:
@@ -14,13 +14,10 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
     motionNodeName: 
     rigImportErrors: 
-    rigImportWarnings: "Avatar Rig Configuration mis-match. Bone length in configuration
-      does not match position in animation file:\n\t'RigLThumb2' : position error
-      = 5.809772 mm\n\t'RigLThumb3' : position error = 5.197661 mm\n\t'RigRThumb2'
-      : position error = 5.811038 mm\n\t'RigRThumb3' : position error = 5.197133
-      mm\n"
+    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -35,7 +32,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations: []
-    isReadable: 0
+    isReadable: 1
   meshes:
     lODScreenPercentages: []
     globalScale: 1
@@ -47,6 +44,7 @@ ModelImporter:
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
+    nodeNameCollisionStrategy: 0
     fileIdsGeneration: 2
     swapUVChannels: 0
     generateSecondaryUV: 0
@@ -58,6 +56,7 @@ ModelImporter:
     skinWeightsMode: 0
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
+    optimizeBones: 1
     meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
@@ -639,6 +638,7 @@ ModelImporter:
   humanoidOversampling: 1
   avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 

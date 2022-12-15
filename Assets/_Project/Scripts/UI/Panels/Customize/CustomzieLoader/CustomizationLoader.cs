@@ -1,6 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,37 +9,41 @@ public class CustomizationLoader : MonoBehaviour
     private readonly List<List<CustomizeSelection>> equipments = new List<List<CustomizeSelection>>();
 
     public const string CUSTOMIZE_FILE = "CUSTOMIZE_FILE";
+    public const string CUSTOMIZE_KEY = "CUSTOMIZE_PART_";
+
+    public const string CUSTOMIZE_CURRENT_SELECTED = "CUSTOMIZE_CURRENT_SELECTED";
+    public const string CUSTOMIZE_CURRENT_SELECTED_FILE = "CUSTOMIZE_CURRENT_SELECTED_FILE";
+
+    private string lastCustomizeKey = "";
     
+    private Button[] customizeButtons;
 
-    [SerializeField] private List<Button> customizeButtons;
+    public static event Action<List<CustomizeSelection>> OnCustomizeSelected;
     
-    private void Awake()
-    {
-        for (int i = 1; i <= customizeButtons.Count; i++)
-        {
-            customizeButtons[i].onClick.AddListener(() => { ButtonSelected("CUSTOMIZE_PART_" + i); });
-        }
+    private void Awake() {
+        customizeButtons = GetComponentsInChildren<Button>();
         
-        customizeButtons[0].onClick.Invoke();
+        customizeButtons[0].onClick.AddListener(() => ButtonSelected(CUSTOMIZE_KEY + 1));
+        customizeButtons[1].onClick.AddListener(() => ButtonSelected(CUSTOMIZE_KEY + 2));
+        customizeButtons[2].onClick.AddListener(() => ButtonSelected(CUSTOMIZE_KEY + 3));
     }
 
-    void Start()
-    {
-        
+    private void OnEnable() {
+        CustomizePanel.OnEnableCustomize += ButtonSelected;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    private void OnDisable() {
+        CustomizePanel.OnEnableCustomize -= ButtonSelected;
     }
 
-    private void ButtonSelected(string customizeName)
-    {
-        CustomizeCharacterEquipmentData.Instance.currentKeySelectedCustomization = customizeName;
-    }
-    private void SelectCurrentEquipiment()
-    {
+    private void ButtonSelected(string customizeKey) {
+        if (customizeKey == lastCustomizeKey) return;
+
+        lastCustomizeKey = customizeKey;
+        CustomizeCharacterEquipmentData.Instance.currentKeySelectedCustomization = customizeKey;
+        SaveManager.SaveDates(CUSTOMIZE_CURRENT_SELECTED,new List<string>() { customizeKey },CUSTOMIZE_CURRENT_SELECTED_FILE,ModificationType.Replaced);
         
+        var customization = SaveManager.LoadDates<CustomizeSelection>(customizeKey,CUSTOMIZE_FILE);
+        OnCustomizeSelected?.Invoke(customization);
     }
 }

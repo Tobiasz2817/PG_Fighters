@@ -48,9 +48,10 @@ public class SaveManager
         Wrapper<T> wrapper = new Wrapper<T>(); 
          
         if (SaveExsist(fileName)) 
-            wrapper.Items = GetFile<T>(fileName); 
+            wrapper.Items = GetFile<T>(fileName);
         if (wrapper.Items.ContainsKey(key)) 
-            wrapper.Items.Remove(key); 
+            wrapper.Items.Remove(key);
+        
         wrapper.Items.Add(key,new Item<T>() { Items = newDates } ); 
         return wrapper; 
     } 
