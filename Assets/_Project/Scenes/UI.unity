@@ -6419,10 +6419,10 @@ MonoBehaviour:
     secoundPartList:
     - nameFirstPart: Color
       partList:
-      - prefab: {fileID: 7995348064364176312, guid: 4fd4f75f58c9935418a1d6253dfc29c4, type: 3}
-        imagePrefab: {fileID: 21300000, guid: 34ba50e707e296f4da5d82c98d47c776, type: 3}
       - prefab: {fileID: 7323631921189761916, guid: 728f2965eb025b147977e0d020bf54e3, type: 3}
         imagePrefab: {fileID: 21300000, guid: 05d8674b3e9f4a742aed71591b616690, type: 3}
+      - prefab: {fileID: 7995348064364176312, guid: 4fd4f75f58c9935418a1d6253dfc29c4, type: 3}
+        imagePrefab: {fileID: 21300000, guid: 34ba50e707e296f4da5d82c98d47c776, type: 3}
       - prefab: {fileID: 8440231926827417709, guid: c3beb6784ad95de4d8acfb16931b6615, type: 3}
         imagePrefab: {fileID: 21300000, guid: eb2c618fe258fbd4f88ab2550716ec12, type: 3}
       - prefab: {fileID: 3738620646599085024, guid: d0170846c54ef4341a783ba0a6d69ca9, type: 3}
@@ -11179,6 +11179,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _customizeData: {fileID: 1416732389}
+  meshRenderer: {fileID: 0}
 --- !u!114 &6706309602690871048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11204,7 +11205,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82f3b79e8a9b30648898915161a9aa74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 5129475928935981546}
 --- !u!4 &6718838005397299144
 Transform:
   m_ObjectHideFlags: 0
@@ -11848,7 +11848,7 @@ GameObject:
   - component: {fileID: 5922875189108224789}
   - component: {fileID: 5129475928935981546}
   m_Layer: 0
-  m_Name: Robot Alpha Base
+  m_Name: + Color
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

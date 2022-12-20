@@ -13,26 +13,32 @@ public class CustomizeCharacterEquipment : MonoBehaviour
 
     [SerializeField] 
     private CustomizeData _customizeData;
+    [SerializeField] 
+    private SkinnedMeshRenderer meshRenderer;
 
     private void OnEnable()
     {
         CustomizeSelectionPrefab.OnCustomizeSelectionPart += EquipPart;
         CustomizePanel.OnSaveChanges += SaveChanges;
-        CustomizationLoader.OnCustomizeSelected += EquipLoadParts;
+        CustomizationLoader.OnCustomizeSelected += EquipLoad;
+        CustomizeSelectionPrefab.OnCustomizeSelectionColor += EquipColor;
     }
 
     private void OnDisable()
     {
         CustomizeSelectionPrefab.OnCustomizeSelectionPart -= EquipPart;
         CustomizePanel.OnSaveChanges -= SaveChanges;
-        CustomizationLoader.OnCustomizeSelected -= EquipLoadParts;
+        CustomizationLoader.OnCustomizeSelected -= EquipLoad;
+        CustomizeSelectionPrefab.OnCustomizeSelectionColor -= EquipColor;
     }
 
     private void Awake()
     {
         FindContents(transform);
+        meshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
     }
-    
+
+
     private void FindContents(Transform reserachPrefab)   
     {
         if (!reserachPrefab) throw new Exception("Customize Prefab are null");
@@ -46,20 +52,26 @@ public class CustomizeCharacterEquipment : MonoBehaviour
                     contents.Add(contentKey.nameMainPart,child);
                     foreach (var secoundPart in contentKey.secoundPartList)
                         currentEquipment.Add(new CustomizeSelectionTmp(new CustomizeSelection(contentKey.nameMainPart,secoundPart.nameFirstPart,-1),null));
-                    
                 }
     }
 
     private void EquipPart(CustomizeSelection customizeSelection, GameObject prefab){
-        Debug.Log("TAK");
         for (int i = 0; i < currentEquipment.Count; i++) {
-            if (currentEquipment[i].customizeSelection.secoundPart == customizeSelection.secoundPart) {
-                if (currentEquipment[i].prefab != null)
-                    Destroy(currentEquipment[i].prefab);
+            if (currentEquipment[i].customizeSelection.secoundPart != customizeSelection.secoundPart) continue;
+            if (currentEquipment[i].prefab != null)
+                Destroy(currentEquipment[i].prefab);
 
-                GameObject newObject = Instantiate(prefab,contents[currentEquipment[i].customizeSelection.contentName]);
-                currentEquipment[i] = new CustomizeSelectionTmp(customizeSelection,newObject);
-            }
+            GameObject newObject = Instantiate(prefab,contents[currentEquipment[i].customizeSelection.contentName]);
+            currentEquipment[i] = new CustomizeSelectionTmp(customizeSelection,newObject);
+        }
+    }
+    private void EquipColor(CustomizeSelection customizeSelection, GameObject prefab) {
+        for (int i = 0; i < currentEquipment.Count; i++) {
+            if (currentEquipment[i].customizeSelection.secoundPart != customizeSelection.secoundPart) continue;
+            var material = Instantiate(prefab);
+            meshRenderer.material = material.GetComponent<SkinnedMeshRenderer>().material;
+            Destroy(material);
+            currentEquipment[i] = new CustomizeSelectionTmp(customizeSelection,null);
         }
     }
     private void SaveChanges() {
@@ -74,27 +86,50 @@ public class CustomizeCharacterEquipment : MonoBehaviour
 
     public void ClearSaves() {
         foreach (var equipment in currentEquipment) {
-            Destroy(equipment.prefab);
+            if(equipment.prefab != null)
+                Destroy(equipment.prefab);
             equipment.customizeSelection.index = -1;
             equipment.prefab = null;
         }
     }
-    public void EquipLoadParts(List<CustomizeSelection> customizationEquipmetns) {
+    public void EquipLoad(List<CustomizeSelection> customizationEquipmetns) {
         ClearSaves();
         
+        if(customizationEquipmetns.Count == 0)
+            EquipColor(new CustomizeSelection("+ Color","Color",CustomizationLoader.BasicCustomizationColor),CustomizeCharacterEquipmentData.Instance.GetCustomizePrefab(CustomizationLoader.BasicCustomizationColor));
+            
         foreach (var current in customizationEquipmetns) {
             if(current.index == -1) continue;
-            var newObject =
-                Instantiate(
-                    CustomizeCharacterEquipmentData.Instance.GetCustomizePrefab(current.index),
-                    contents[current.contentName]);
 
-            var customizeSelectionTmp = GetCustomizeElement(current.secoundPart);
-            if(customizeSelectionTmp == null) continue;
-
-            customizeSelectionTmp.prefab = newObject;
-            customizeSelectionTmp.customizeSelection.index = current.index;
+            if (current.contentName != "+ Color") 
+                EquipPart(current);
+            else 
+                EquipColor(current);
         }
+    }
+
+    private void EquipColor(CustomizeSelection current) {
+        var newObject =
+            Instantiate(
+                CustomizeCharacterEquipmentData.Instance.GetCustomizePrefab(current.index));
+
+        var customizeSelectionTmp = GetCustomizeElement(current.secoundPart);
+        if (customizeSelectionTmp == null) return;
+        meshRenderer.material = newObject.GetComponent<SkinnedMeshRenderer>().material;
+        Destroy(newObject);
+        customizeSelectionTmp.customizeSelection.index = current.index;
+    }
+
+    private void EquipPart(CustomizeSelection current) {
+        var newObject =
+            Instantiate(
+                CustomizeCharacterEquipmentData.Instance.GetCustomizePrefab(current.index),
+                contents[current.contentName]);
+
+        var customizeSelectionTmp = GetCustomizeElement(current.secoundPart);
+        if (customizeSelectionTmp == null) return;
+        customizeSelectionTmp.prefab = newObject;
+        customizeSelectionTmp.customizeSelection.index = current.index;
     }
 
     private CustomizeSelectionTmp GetCustomizeElement(string secoundPart) {

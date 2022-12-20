@@ -25,6 +25,9 @@ public class CustomizationEquipmentParts : MonoBehaviour
                 var customizePrefab = tmp.GetComponent<CustomizePrefab>();
                 customizePrefab.SetupPrefab(secoundPart.nameFirstPart);
 
+                if (mainPart.nameMainPart == "+ Color" && CustomizationLoader.BasicCustomizationColor == 0)
+                    CustomizationLoader.BasicCustomizationColor = x;
+                
                 foreach (var element in secoundPart.partList)
                 {
                     customizePrefab.SetupChild(new CustomizeSelection(mainPart.nameMainPart,secoundPart.nameFirstPart,x), element.imagePrefab,element.prefab);

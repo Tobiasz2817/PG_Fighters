@@ -6,14 +6,14 @@ using UnityEngine.UI;
 
 public class CustomizationLoader : MonoBehaviour
 {
-    private readonly List<List<CustomizeSelection>> equipments = new List<List<CustomizeSelection>>();
-
     public const string CUSTOMIZE_FILE = "CUSTOMIZE_FILE";
     public const string CUSTOMIZE_KEY = "CUSTOMIZE_PART_";
 
     public const string CUSTOMIZE_CURRENT_SELECTED = "CUSTOMIZE_CURRENT_SELECTED";
     public const string CUSTOMIZE_CURRENT_SELECTED_FILE = "CUSTOMIZE_CURRENT_SELECTED_FILE";
 
+    public static int BasicCustomizationColor;
+    
     private string lastCustomizeKey = "";
     
     private Button[] customizeButtons;

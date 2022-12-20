@@ -22,7 +22,7 @@ public class CustomizeSelectionPrefab : MonoBehaviour
 
     public GameObject customizePrefab;
     public static event Action<CustomizeSelection,GameObject> OnCustomizeSelectionPart;
-    public static event Action<GameObject> OnCustomizeSelectionColor;
+    public static event Action<CustomizeSelection,GameObject> OnCustomizeSelectionColor;
     
     [SerializeField] private Button buttonHandler;
     [SerializeField] private Image partImage;
@@ -37,7 +37,7 @@ public class CustomizeSelectionPrefab : MonoBehaviour
     private void AddButtonListner()
     {
         if (customizeSelection.secoundPart == "Color")
-            buttonHandler.onClick.AddListener(() => { OnCustomizeSelectionColor?.Invoke(customizePrefab);});
+            buttonHandler.onClick.AddListener(() => { OnCustomizeSelectionColor?.Invoke(customizeSelection,customizePrefab);});
         else
             buttonHandler.onClick.AddListener(() => { OnCustomizeSelectionPart?.Invoke(customizeSelection,customizePrefab);});
     }
