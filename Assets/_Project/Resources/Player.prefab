@@ -995,11 +995,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5472870066037193998}
-  - component: {fileID: 8574812729697892381}
+  - component: {fileID: -1675713300325557727}
   - component: {fileID: 5472870066037193993}
   - component: {fileID: 6554785222052031304}
-  - component: {fileID: 620062064915056531}
-  - component: {fileID: 3749232422122268008}
+  - component: {fileID: -6333962714924419921}
+  - component: {fileID: 8974553298081988025}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1023,7 +1023,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -10.34, z: 0}
---- !u!114 &8574812729697892381
+--- !u!114 &-1675713300325557727
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1059,7 +1059,15 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 549f3851-fc5e-4eb8-b366-efffa3113927
-    m_ActionName: Player/Movement[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+    m_ActionName: Player/Movement[/Keyboard/a,/Keyboard/d,/Keyboard/w,/Keyboard/s]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: bf4166cd-440a-4481-8f58-d37c9d721bd5
+    m_ActionName: Player/Mouse[/Mouse/delta]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: b28fa51b-d125-464d-88e9-4fa3932df975
+    m_ActionName: Environment/Mouse[/Mouse/position]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -1079,7 +1087,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GlobalObjectIdHash: 951099334
   AlwaysReplicateAsRoot: 0
-  DontDestroyWithOwner: 0
+  DontDestroyWithOwner: 1
   AutoObjectParentSync: 1
 --- !u!114 &6554785222052031304
 MonoBehaviour:
@@ -1094,7 +1102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   body: {fileID: 6884492788558099316}
---- !u!114 &620062064915056531
+--- !u!114 &-6333962714924419921
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1106,24 +1114,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2d49fa7005a87c43a95282832d9f97c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!143 &3749232422122268008
-CharacterController:
+  speed: 8
+  smoothTime: 0.01
+--- !u!114 &8974553298081988025
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5472870066037193999}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Height: 2
-  m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df2868252ab5c4d1da357e8f11f1b524, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  InLocalSpace: 0
+  Interpolate: 1
 --- !u!1 &5504683712307842716
 GameObject:
   m_ObjectHideFlags: 0

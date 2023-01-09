@@ -10,17 +10,8 @@ public class PlayerCustomizeEquipment : NetworkBehaviour
 
     [SerializeField] private Transform body;
 
-    private void Awake() {
-        Debug.Log("Customization are Disabled");
-        return;
-        
-        characterContetns = FindContents();
-    }
-
     public override void OnNetworkSpawn() {
-        Debug.Log("Customization are Disabled");
-        return;
-        
+        characterContetns = FindContents();
         if (!IsOwner) return;
         
         foreach (var customize in CustomizeCharacterEquipmentData.Instance.GetCustomizeSelections())

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +10,7 @@ public class CustomizationEquipmentParts : MonoBehaviour
 
     [SerializeField]
     private GameObject _customizePrefab;
-
+    public static event Action OnInterfaceCustomizationCreated;
     void Start()
     {
         InstancesChilds();
@@ -35,5 +36,7 @@ public class CustomizationEquipmentParts : MonoBehaviour
                     x++;
                 }
             }
+        
+        OnInterfaceCustomizationCreated?.Invoke();
     }
 }

@@ -53,8 +53,6 @@ public class CustomizeCharacterEquipmentData : MonoBehaviour, IDataInstances
        ClearCurrentEquipment();
         foreach (var equipment in obj) 
             SetCurrentEquipment(equipment);
-        
-        Debug.Log("Current Load Saved");
     }
     public void ClearCurrentEquipment()
     {
