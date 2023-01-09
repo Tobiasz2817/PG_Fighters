@@ -22,7 +22,7 @@ public class SaveManager
     private static string directory = "SaveData"; 
     private static string typeFile = ".json"; 
     public static void SaveDates<T>(string key,List<T> newDates,string fileName,ModificationType modType = ModificationType.Append) 
-    { 
+    {
         if (!DirectoryExists()) 
             Directory.CreateDirectory(directory); 
         Wrapper<T> wrapper = null; 

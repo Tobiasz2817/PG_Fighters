@@ -49,13 +49,28 @@ public class CustomizeCharacterEquipmentData : MonoBehaviour, IDataInstances
     {
         currentEquipment.Add(customizeEquipmentPart);
     }
+    public void SaveCurrentLoad(List<CustomizeSelection> obj) {
+       ClearCurrentEquipment();
+        foreach (var equipment in obj) 
+            SetCurrentEquipment(equipment);
+        
+        Debug.Log("Current Load Saved");
+    }
+    public void ClearCurrentEquipment()
+    {
+        currentEquipment.Clear();
+    }
     public IEnumerable<string> GetHeaders()
     {
         foreach (var customizeEquipmentPart in currentEquipment)
-        {
             yield return customizeEquipmentPart.contentName;
-        }
     }
+    public IEnumerable<CustomizeSelection> GetCustomizeSelections()
+    {
+        foreach (var customizeEquipmentPart in currentEquipment)
+            yield return customizeEquipmentPart;
+    }
+    
     #endregion
     
     public Task IsDone()
