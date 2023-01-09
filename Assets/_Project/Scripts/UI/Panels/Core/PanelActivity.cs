@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using UnityEngine;
+
 
 
 public class PanelActivity : MonoBehaviour
@@ -54,6 +54,8 @@ public class PanelActivity : MonoBehaviour
         newPanel.OnPanelSelection?.Invoke();
         
         currentSelectedMainPanel = newPanel;
+        
+        
     }
     Panel FindPanels(Panels typePanel)
     {

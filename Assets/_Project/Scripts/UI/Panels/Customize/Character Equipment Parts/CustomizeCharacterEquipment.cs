@@ -21,6 +21,7 @@ public class CustomizeCharacterEquipment : MonoBehaviour
         CustomizeSelectionPrefab.OnCustomizeSelectionPart += EquipPart;
         CustomizePanel.OnSaveChanges += SaveChanges;
         CustomizationLoader.OnCustomizeSelected += EquipLoad;
+        CustomizationLoader.OnCustomizeSelected += CustomizeCharacterEquipmentData.Instance.SaveCurrentLoad;
         CustomizeSelectionPrefab.OnCustomizeSelectionColor += EquipColor;
     }
 
@@ -29,6 +30,7 @@ public class CustomizeCharacterEquipment : MonoBehaviour
         CustomizeSelectionPrefab.OnCustomizeSelectionPart -= EquipPart;
         CustomizePanel.OnSaveChanges -= SaveChanges;
         CustomizationLoader.OnCustomizeSelected -= EquipLoad;
+        CustomizationLoader.OnCustomizeSelected -= CustomizeCharacterEquipmentData.Instance.SaveCurrentLoad;
         CustomizeSelectionPrefab.OnCustomizeSelectionColor -= EquipColor;
     }
 
@@ -80,7 +82,7 @@ public class CustomizeCharacterEquipment : MonoBehaviour
         foreach (var current in currentEquipment) 
             customizeSelections.Add(current.customizeSelection);
 
-        SaveManager.SaveDates(CustomizeCharacterEquipmentData.Instance.currentKeySelectedCustomization,customizeSelections,CustomizationLoader.CUSTOMIZE_FILE,ModificationType.Replaced);
+        SaveCurrentLoad(customizeSelections);
         SaveManager.SaveDates(CustomizeCharacterEquipmentData.Instance.currentKeySelectedCustomization,customizeSelections,CustomizationLoader.CUSTOMIZE_FILE,ModificationType.Replaced);
     }
 
@@ -132,6 +134,14 @@ public class CustomizeCharacterEquipment : MonoBehaviour
         customizeSelectionTmp.customizeSelection.index = current.index;
     }
 
+    private void SaveCurrentLoad(List<CustomizeSelection> obj) {
+        CustomizeCharacterEquipmentData.Instance.ClearCurrentEquipment();
+        foreach (var equipment in obj) 
+            CustomizeCharacterEquipmentData.Instance.SetCurrentEquipment(equipment);
+        
+                
+        Debug.Log("Current Load Saved");
+    }
     private CustomizeSelectionTmp GetCustomizeElement(string secoundPart) {
         foreach (var element in currentEquipment) 
             if (element.customizeSelection.secoundPart == secoundPart)

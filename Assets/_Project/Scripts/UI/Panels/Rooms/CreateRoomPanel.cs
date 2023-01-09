@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class CreateRoomPanel : Panel
 {
     [SerializeField] private Button createRoomBT; 
+    [SerializeField] private Button quickCreateRoomBT; 
     [SerializeField] private Button gameModeButton;
     
     [SerializeField] private TMP_InputField roomNameIF; 
@@ -23,6 +24,11 @@ public class CreateRoomPanel : Panel
         
         createRoomBT.onClick.AddListener(() => {
             LobbyManager.Instance.CreateLobby(roomNameIF.text,2,isPrivateTG.isOn,gameMode);
+            PanelActivity.Instance.MoveTo(Panels.WaitingPanel);
+        });
+        
+        quickCreateRoomBT.onClick.AddListener(() => {
+            LobbyManager.Instance.CreateLobby("Room " + Random.Range(10,1000000),2,false,gameMode);
             PanelActivity.Instance.MoveTo(Panels.WaitingPanel);
         });
         

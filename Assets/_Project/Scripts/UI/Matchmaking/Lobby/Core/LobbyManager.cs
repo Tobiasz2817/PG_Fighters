@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ParrelSync;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
@@ -50,7 +52,7 @@ public class LobbyManager : MonoBehaviour
         HandleRefreshLobbyList();
         HandleLobbyPolling();
     }
-
+    
     public async void Authenticate(string playerName) {
         this.playerName = playerName;
         InitializationOptions initializationOptions = new InitializationOptions();
@@ -116,11 +118,8 @@ public class LobbyManager : MonoBehaviour
                 if (IsGameStarted()) {
                     if (!IsLobbyHost()) {
                         RelayManager.Instance.JoinRelay(joinedLobby.Data[LobbyConstans.KEY_START_GAME].Value);
-                        Debug.Log("JoinRelay");
                     }
-                
-                    OnGameStarted?.Invoke();
-                    Debug.Log("IsGameStarted");
+ 
                     joinedLobby = null;
                 }
                 
@@ -205,14 +204,29 @@ public class LobbyManager : MonoBehaviour
                 joinedLobby = await Lobbies.Instance.UpdateLobbyAsync(joinedLobby.Id, new UpdateLobbyOptions() {
                     Data = new Dictionary<string, DataObject> {
                         { LobbyConstans.KEY_START_GAME, new DataObject(DataObject.VisibilityOptions.Member,relayCode) }
-                    }
+                    },
+                    IsLocked = true
                 });
+
+                StartCoroutine(HandleStartingGame(joinedLobby.Players.Count));
+                Debug.Log(" Waiting for players.... ");
             }
             catch (LobbyServiceException e){
                 Console.WriteLine(e);
             }
         }
     }
+    private IEnumerator HandleStartingGame(int countPlayers) {
+        while (true) {
+            yield return new WaitForSeconds(1f);
+            if (countPlayers == NetworkManager.Singleton.ConnectedClients.Count) {
+                OnGameStarted?.Invoke();
+                StopAllCoroutines();
+                break;
+            }
+        }
+    }
+
     public async void RefreshLobbyList() {
         try {
             QueryLobbiesOptions options = new QueryLobbiesOptions();
@@ -243,6 +257,15 @@ public class LobbyManager : MonoBehaviour
         Player player = GetPlayer();
 
         joinedLobby = await LobbyService.Instance.JoinLobbyByCodeAsync(lobbyCode, new JoinLobbyByCodeOptions {
+            Player = player
+        });
+
+        OnJoinedLobby?.Invoke(joinedLobby);
+    }
+    public async void QuickJoinLobby() {
+        Player player = GetPlayer();
+
+        joinedLobby = await LobbyService.Instance.QuickJoinLobbyAsync(new QuickJoinLobbyOptions() {
             Player = player
         });
 
@@ -308,18 +331,6 @@ public class LobbyManager : MonoBehaviour
         return true;
     }
     
-    public async void QuickJoinLobby() {
-        try {
-            QuickJoinLobbyOptions options = new QuickJoinLobbyOptions();
-
-            joinedLobby = await LobbyService.Instance.QuickJoinLobbyAsync(options);
-            
-            OnJoinedLobby?.Invoke(joinedLobby);
-        } catch (LobbyServiceException e) {
-            Debug.Log(e);
-        }
-    }
-
     public async void LeaveLobby() {
         if (joinedLobby != null) {
             try {
@@ -344,6 +355,7 @@ public class LobbyManager : MonoBehaviour
             }
         }
     }
+
 }
 public class LobbyConstans {
     public const string KEY_PLAYER_NAME = "PlayerName";

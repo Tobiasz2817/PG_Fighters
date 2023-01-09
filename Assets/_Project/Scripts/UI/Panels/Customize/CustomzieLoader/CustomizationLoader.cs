@@ -28,6 +28,10 @@ public class CustomizationLoader : MonoBehaviour
         customizeButtons[2].onClick.AddListener(() => ButtonSelected(CUSTOMIZE_KEY + 3));
     }
 
+    private void Start() {
+        LoadAndSaveCurrentLoad();
+    }
+
     private void OnEnable() {
         CustomizePanel.OnEnableCustomize += ButtonSelected;
     }
@@ -45,5 +49,13 @@ public class CustomizationLoader : MonoBehaviour
         
         var customization = SaveManager.LoadDates<CustomizeSelection>(customizeKey,CUSTOMIZE_FILE);
         OnCustomizeSelected?.Invoke(customization);
+    }
+
+    private void LoadAndSaveCurrentLoad() {
+        var key = SaveManager.LoadDates<string>(CUSTOMIZE_CURRENT_SELECTED,CUSTOMIZE_CURRENT_SELECTED_FILE);
+        if (key.Count <= 0) return;
+        
+        var customization = SaveManager.LoadDates<CustomizeSelection>(key[0],CUSTOMIZE_FILE);
+        CustomizeCharacterEquipmentData.Instance.SaveCurrentLoad(customization);
     }
 }

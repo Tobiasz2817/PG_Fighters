@@ -11,6 +11,7 @@ public class LobbiesPanel : Panel
 {
     [SerializeField] private TMP_InputField enterCodeIF;
     [SerializeField] private Button enterBT;
+    [SerializeField] private Button enterQuickBT;
 
     [SerializeField] private Transform lobbyContent;
     [SerializeField] private Transform lobbyPrefab;
@@ -20,6 +21,11 @@ public class LobbiesPanel : Panel
         
         enterBT.onClick.AddListener(() => {
             LobbyManager.Instance.JoinLobby(enterCodeIF.text);
+            PanelActivity.Instance.MoveTo(Panels.WaitingPanel);
+        });
+        
+        enterQuickBT.onClick.AddListener(() => {
+            LobbyManager.Instance.QuickJoinLobby();
             PanelActivity.Instance.MoveTo(Panels.WaitingPanel);
         });
     }

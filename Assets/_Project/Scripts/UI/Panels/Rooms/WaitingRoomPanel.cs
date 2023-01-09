@@ -1,7 +1,9 @@
 using TMPro;
+using Unity.Netcode;
 using Unity.Services.Authentication;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class WaitingRoomPanel : Panel
@@ -45,8 +47,16 @@ public class WaitingRoomPanel : Panel
         LobbyManager.Instance.OnLobbyGameModeChanged += OnUpdateLobby;
         LobbyManager.Instance.OnLeftLobby += OnLeftLobby;
         LobbyManager.Instance.OnKickedFromLobby += OnLeftLobby;
+        LobbyManager.Instance.OnGameStarted += StartingGame;
     }
-    
+
+    private void StartingGame() {
+        Debug.Log("Game is starting");
+
+        NetworkManager.Singleton.SceneManager.LoadScene("Gameplay", LoadSceneMode.Single);
+    }
+
+
     protected override void OnSelectionPanel() {
         base.OnSelectionPanel();
     }
@@ -59,6 +69,7 @@ public class WaitingRoomPanel : Panel
     }
     private void OnLeftLobby() {
         ClearLobby();
+        ResetLobbyInterface();
         PanelActivity.Instance.MoveTo(Panels.MainPanel);
     }
     
@@ -92,7 +103,7 @@ public class WaitingRoomPanel : Panel
             isReadyBT.gameObject.SetActive(LobbyManager.Instance.PlayersReady());
             SetTextActive("Start");
         }
-        else SetTextActive(isActive ? "Ready" : "UnReady");
+        else SetTextActive(isActive ? "UnReady" : "Ready");
         
         lobbyNameText.text = lobby.Name;
         enterCodeText.text = lobby.LobbyCode;
@@ -105,6 +116,11 @@ public class WaitingRoomPanel : Panel
             if (child == playerTemplate) continue;
             Destroy(child.gameObject);
         }
+    }
+    
+    private void ResetLobbyInterface() {
+        isActive = false;
+        SetTextActive(isActive ? "UnReady" : "Ready");
     }
 
     private void SetTextActive(string readyText) {
