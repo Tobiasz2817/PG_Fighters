@@ -1388,7 +1388,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &338799734
 GameObject:
@@ -1821,6 +1821,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce345b105e4b6074ca98502427807d49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _customizeData: {fileID: 1416732389}
 --- !u!114 &439053992
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1889,7 +1890,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &502799079
 GameObject:
@@ -3846,68 +3847,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1627378762}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &974158615
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 974158617}
-  - component: {fileID: 974158616}
-  m_Layer: 0
-  m_Name: InputManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &974158616
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 974158615}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: a3eb29c2057a67e4680d0dff82063b4d, type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: PlayerInput
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
---- !u!4 &974158617
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 974158615}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1001254910
 GameObject:
@@ -7054,7 +6993,7 @@ MonoBehaviour:
   myType: 5
   alphaDuration: 0.8
   isCurrentActive: 0
-  customizePrefab: {fileID: 52465900093419461}
+  customizeCharacterEquipment: {fileID: 6706309602690871047}
   button: {fileID: 8431520307567544254}
 --- !u!1 &1627378761
 GameObject:
@@ -7631,7 +7570,6 @@ MonoBehaviour:
   m_ProtocolType: 0
   m_MaxPacketQueueSize: 128
   m_MaxPayloadSize: 6144
-  m_MaxSendQueueSize: 98304
   m_HeartbeatTimeoutMS: 500
   m_ConnectTimeoutMS: 1000
   m_MaxConnectAttempts: 60
@@ -7696,7 +7634,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1862458014
 GameObject:
@@ -9729,14 +9667,13 @@ GameObject:
   - component: {fileID: 6706309602690871045}
   - component: {fileID: 6706309602690871048}
   - component: {fileID: 6706309602690871047}
-  - component: {fileID: 6706309602690871049}
   m_Layer: 0
   m_Name: Robot Alpha Blue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &70845726929499466
 Transform:
   m_ObjectHideFlags: 0
@@ -11194,7 +11131,7 @@ SkinnedMeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8967383942825631275}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -11643,7 +11580,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _customizeData: {fileID: 1416732389}
-  meshRenderer: {fileID: 0}
+  meshRenderer: {fileID: 5129475928935981546}
 --- !u!114 &6706309602690871048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11657,18 +11594,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotateSpeed: 15
---- !u!114 &6706309602690871049
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 52465900093419461}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82f3b79e8a9b30648898915161a9aa74, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &6718838005397299144
 Transform:
   m_ObjectHideFlags: 0
@@ -12119,7 +12044,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1803077586933353666, guid: c8f6e7a192cc23a4b928d1055585187c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1803077586933353666, guid: c8f6e7a192cc23a4b928d1055585187c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode

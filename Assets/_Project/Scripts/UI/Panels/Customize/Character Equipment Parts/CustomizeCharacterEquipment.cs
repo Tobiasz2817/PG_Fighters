@@ -16,6 +16,11 @@ public class CustomizeCharacterEquipment : MonoBehaviour
     [SerializeField] 
     private SkinnedMeshRenderer meshRenderer;
 
+    private void Awake()
+    {
+        FindContents(transform);
+    }
+    
     private void OnEnable()
     {
         CustomizeSelectionPrefab.OnCustomizeSelectionPart += EquipPart;
@@ -23,6 +28,7 @@ public class CustomizeCharacterEquipment : MonoBehaviour
         CustomizationLoader.OnCustomizeSelected += EquipLoad;
         CustomizationLoader.OnCustomizeSelected += CustomizeCharacterEquipmentData.Instance.SaveCurrentLoad;
         CustomizeSelectionPrefab.OnCustomizeSelectionColor += EquipColor;
+        CustomizationLoader.OnLoadedCustomizations += DisableDisplayCharacter;
     }
 
     private void OnDisable()
@@ -32,20 +38,14 @@ public class CustomizeCharacterEquipment : MonoBehaviour
         CustomizationLoader.OnCustomizeSelected -= EquipLoad;
         CustomizationLoader.OnCustomizeSelected -= CustomizeCharacterEquipmentData.Instance.SaveCurrentLoad;
         CustomizeSelectionPrefab.OnCustomizeSelectionColor -= EquipColor;
+        CustomizationLoader.OnLoadedCustomizations -= DisableDisplayCharacter;
     }
-
-    private void Awake()
-    {
-        FindContents(transform);
-        meshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
-    }
-
 
     private void FindContents(Transform reserachPrefab)   
     {
         if (!reserachPrefab) throw new Exception("Customize Prefab are null");
         
-        var compo = reserachPrefab.transform.GetComponentsInChildren<Transform>();
+        var compo = reserachPrefab.transform.GetComponentsInChildren<Transform>(false);
 
         foreach (var child in compo)
             foreach (var contentKey in _customizeData.GetCustomizeList())
@@ -96,11 +96,10 @@ public class CustomizeCharacterEquipment : MonoBehaviour
     }
     public void EquipLoad(List<CustomizeSelection> customizationEquipmetns) {
         ClearSaves();
-        
-        if(customizationEquipmetns.Count == 0)
-            EquipColor(new CustomizeSelection("+ Color","Color",CustomizationLoader.BasicCustomizationColor),CustomizeCharacterEquipmentData.Instance.GetCustomizePrefab(CustomizationLoader.BasicCustomizationColor));
-            
+
         foreach (var current in customizationEquipmetns) {
+            if(current.index == -1 && current.contentName == "+ Color")
+                EquipColor(new CustomizeSelection(current.contentName,"Color",CustomizationLoader.BasicCustomizationColor),CustomizeCharacterEquipmentData.Instance.GetCustomizePrefab(CustomizationLoader.BasicCustomizationColor));
             if(current.index == -1) continue;
 
             if (current.contentName != "+ Color") 
@@ -138,9 +137,6 @@ public class CustomizeCharacterEquipment : MonoBehaviour
         CustomizeCharacterEquipmentData.Instance.ClearCurrentEquipment();
         foreach (var equipment in obj) 
             CustomizeCharacterEquipmentData.Instance.SetCurrentEquipment(equipment);
-        
-                
-        Debug.Log("Current Load Saved");
     }
     private CustomizeSelectionTmp GetCustomizeElement(string secoundPart) {
         foreach (var element in currentEquipment) 
@@ -148,6 +144,22 @@ public class CustomizeCharacterEquipment : MonoBehaviour
                 return element;
         
         return null;
+    }
+
+    public void DisableDisplayCharacter() {
+        this.meshRenderer.enabled = false;
+        
+        foreach (var equipment in currentEquipment) 
+            if(equipment.prefab != null)
+                equipment.prefab.SetActive(false);
+    }
+
+    public void EnableDisplayCharacter() {
+        this.meshRenderer.enabled = true;
+        
+        foreach (var equipment in currentEquipment) 
+            if(equipment.prefab != null)
+                equipment.prefab.SetActive(true);
     }
 }
 

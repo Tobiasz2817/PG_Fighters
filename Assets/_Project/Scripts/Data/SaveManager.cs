@@ -112,7 +112,7 @@ public class SaveManager
         } 
         return new SerializedDictionary<string, Item<T>>(); 
     } 
-    private static bool SaveExsist(string fileName) 
+    public static bool SaveExsist(string fileName) 
     { 
         return File.Exists(GetFullPath(fileName)); 
     } 
